@@ -1,4 +1,4 @@
-package com.marquinhosmorales.f1hub.ui.screens
+package com.marquinhosmorales.f1hub.ui.screens.standings
 
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxSize

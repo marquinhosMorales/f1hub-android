@@ -1,4 +1,4 @@
-package com.marquinhosmorales.f1hub
+package com.marquinhosmorales.f1hub.ui
 
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
@@ -7,20 +7,25 @@ import androidx.compose.material3.Scaffold
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.Preview
+import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
+import com.marquinhosmorales.f1hub.data.AppContainer
+import com.marquinhosmorales.f1hub.data.DefaultAppContainer
 import com.marquinhosmorales.f1hub.navigation.Screen
 import com.marquinhosmorales.f1hub.ui.components.F1HubBottomNavigation
-import com.marquinhosmorales.f1hub.ui.screens.DriversScreen
-import com.marquinhosmorales.f1hub.ui.screens.RacesScreen
-import com.marquinhosmorales.f1hub.ui.screens.StandingsScreen
+import com.marquinhosmorales.f1hub.ui.screens.drivers.DriversScreen
+import com.marquinhosmorales.f1hub.ui.screens.drivers.DriversViewModel
+import com.marquinhosmorales.f1hub.ui.screens.races.RacesScreen
+import com.marquinhosmorales.f1hub.ui.screens.standings.StandingsScreen
 import com.marquinhosmorales.f1hub.ui.theme.F1HubTheme
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun F1HubApp(
+    appContainer: AppContainer,
     navController: NavHostController = rememberNavController()
 ) {
     Scaffold(
@@ -37,7 +42,10 @@ fun F1HubApp(
             modifier = Modifier.padding(innerPadding)
         ) {
             composable(Screen.Drivers.route) {
-                DriversScreen()
+                val driversViewModel: DriversViewModel = viewModel(
+                    factory = DriversViewModel.provideFactory(appContainer.driverRepository),
+                )
+                DriversScreen(driversViewModel)
             }
             composable(Screen.Races.route) {
                 RacesScreen()
@@ -53,7 +61,7 @@ fun F1HubApp(
 @Composable
 fun F1HubPreview() {
     F1HubTheme {
-        F1HubApp()
+        F1HubApp(DefaultAppContainer())
     }
 }
 
@@ -61,6 +69,6 @@ fun F1HubPreview() {
 @Composable
 fun F1HubDarkThemePreview() {
     F1HubTheme(darkTheme = true) {
-        F1HubApp()
+        F1HubApp(DefaultAppContainer())
     }
 }
