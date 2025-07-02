@@ -1,5 +1,6 @@
-package com.marquinhosmorales.f1hub.model
+package com.marquinhosmorales.f1hub.model.drivers
 
+import com.marquinhosmorales.f1hub.model.TeamID
 import kotlinx.serialization.Serializable
 
 @Serializable
@@ -13,7 +14,7 @@ data class Driver(
     val shortName: String,
     val url: String,
     val teamId: TeamID?,
-    val country: String?
+    val country: String? = null
 ) {
     val id: String
         get() = driverId ?: name

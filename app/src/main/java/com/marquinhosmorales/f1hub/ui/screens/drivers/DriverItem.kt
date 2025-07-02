@@ -15,7 +15,7 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.marquinhosmorales.f1hub.data.drivers.mockVerstappen
-import com.marquinhosmorales.f1hub.model.Driver
+import com.marquinhosmorales.f1hub.model.drivers.Driver
 import com.marquinhosmorales.f1hub.ui.theme.F1HubTheme
 
 @Composable

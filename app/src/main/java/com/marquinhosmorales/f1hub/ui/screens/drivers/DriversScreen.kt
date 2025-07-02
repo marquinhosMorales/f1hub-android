@@ -18,31 +18,20 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
-import com.marquinhosmorales.f1hub.data.drivers.mockDrivers
+import androidx.lifecycle.viewmodel.compose.viewModel
+import com.marquinhosmorales.f1hub.data.drivers.FakeDriverRepository
 import com.marquinhosmorales.f1hub.navigation.Screen
 import com.marquinhosmorales.f1hub.ui.components.F1HubTopBar
 import com.marquinhosmorales.f1hub.ui.screens.ErrorScreen
 import com.marquinhosmorales.f1hub.ui.screens.LoadingScreen
 import com.marquinhosmorales.f1hub.ui.theme.F1HubTheme
 
+@OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun DriversScreen(
     viewModel: DriversViewModel
 ) {
     val uiState by viewModel.uiState.collectAsState()
-    DriversScreenContent(
-        uiState = uiState,
-        onRefresh = { viewModel.refresh() }
-    )
-}
-
-@OptIn(ExperimentalMaterial3Api::class)
-@Composable
-fun DriversScreenContent(
-    uiState: DriversUiState,
-    onRefresh: () -> Unit,
-    modifier: Modifier = Modifier
-) {
     Scaffold(
         topBar = {
             F1HubTopBar(title = Screen.Drivers.title)
@@ -52,7 +41,7 @@ fun DriversScreenContent(
     ) { innerPadding ->
         PullToRefreshBox(
             isRefreshing = uiState.isRefreshing,
-            onRefresh = onRefresh,
+            onRefresh = { viewModel.refresh() },
             modifier = Modifier
                 .fillMaxSize()
                 .padding(innerPadding)
@@ -71,7 +60,7 @@ fun DriversScreenContent(
 
                     else -> {
                         LazyColumn(
-                            modifier = modifier
+                            modifier = Modifier
                                 .fillMaxSize()
                                 .padding(vertical = 8.dp),
                             horizontalAlignment = Alignment.CenterHorizontally
@@ -92,13 +81,10 @@ fun DriversScreenContent(
 @Composable
 fun DriversScreenPreview() {
     F1HubTheme {
-        DriversScreenContent(
-            uiState = DriversUiState(
-                isLoading = false,
-                error = null,
-                drivers = mockDrivers
-            ),
-            onRefresh = {}
+        DriversScreen(
+            viewModel = viewModel(
+                factory = DriversViewModel.provideFactory(FakeDriverRepository()),
+            )
         )
     }
 }

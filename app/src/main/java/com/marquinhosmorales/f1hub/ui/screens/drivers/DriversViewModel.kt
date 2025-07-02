@@ -4,7 +4,7 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.viewModelScope
 import com.marquinhosmorales.f1hub.data.drivers.DriverRepository
-import com.marquinhosmorales.f1hub.model.Driver
+import com.marquinhosmorales.f1hub.model.drivers.Driver
 import com.marquinhosmorales.f1hub.ui.screens.BaseUiState
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
@@ -36,7 +36,7 @@ class DriversViewModel(
         viewModelScope.launch {
             _uiState.value = DriversUiState(isLoading = true, isRefreshing = isRefreshing)
             try {
-                val drivers = driverRepository.getDrivers()
+                val drivers = driverRepository.getCurrentDrivers()
                 _uiState.value = DriversUiState(drivers = drivers)
             } catch (e: Exception) {
                 _uiState.value = DriversUiState(error = e.message ?: "Failed to load drivers")
