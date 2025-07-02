@@ -10,7 +10,10 @@ import com.marquinhosmorales.f1hub.R
 
 val Formula1 = FontFamily(
     Font(R.font.formula1_display_regular),
-    Font(R.font.formula1_display_bold),
+    Font(R.font.formula1_display_bold)
+)
+
+val Formula1Wide = FontFamily(
     Font(R.font.formula1_display_wide)
 )
 
@@ -36,20 +39,19 @@ val Typography = Typography(
         fontWeight = FontWeight.Bold,
         fontSize = 12.sp
     ),
-    /* Other default text styles to override
-    titleLarge = TextStyle(
-        fontFamily = FontFamily.Default,
+    labelLarge = TextStyle(
+        fontFamily = Formula1,
         fontWeight = FontWeight.Normal,
-        fontSize = 22.sp,
-        lineHeight = 28.sp,
-        letterSpacing = 0.sp
+        fontSize = 14.sp
+    ),
+    labelMedium = TextStyle(
+        fontFamily = Formula1,
+        fontWeight = FontWeight.Normal,
+        fontSize = 12.sp
     ),
     labelSmall = TextStyle(
-        fontFamily = FontFamily.Default,
-        fontWeight = FontWeight.Medium,
-        fontSize = 11.sp,
-        lineHeight = 16.sp,
-        letterSpacing = 0.5.sp
+        fontFamily = Formula1,
+        fontWeight = FontWeight.Normal,
+        fontSize = 12.sp
     )
-    */
 )

@@ -1,7 +1,8 @@
 package com.marquinhosmorales.f1hub.ui
 
-import android.annotation.SuppressLint
+import androidx.compose.foundation.layout.consumeWindowInsets
 import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.padding
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Scaffold
 import androidx.compose.runtime.Composable
@@ -22,7 +23,6 @@ import com.marquinhosmorales.f1hub.ui.screens.races.RacesScreen
 import com.marquinhosmorales.f1hub.ui.screens.standings.StandingsScreen
 import com.marquinhosmorales.f1hub.ui.theme.F1HubTheme
 
-@SuppressLint("UnusedMaterial3ScaffoldPaddingParameter")
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun F1HubApp(
@@ -36,10 +36,14 @@ fun F1HubApp(
             )
         },
         modifier = Modifier.fillMaxSize()
-    ) {
+    ) { innerPadding ->
         NavHost(
             navController = navController,
-            startDestination = Screen.Drivers.route
+            startDestination = Screen.Drivers.route,
+            modifier = Modifier
+                .fillMaxSize()
+                .padding(innerPadding)
+                .consumeWindowInsets(innerPadding)
         ) {
             composable(Screen.Drivers.route) {
                 val driversViewModel: DriversViewModel = viewModel(
