@@ -1,14 +1,14 @@
 package com.marquinhosmorales.f1hub.data.drivers
 
 import android.util.Log
-import com.marquinhosmorales.f1hub.data.network.DriverApiService
 import com.marquinhosmorales.f1hub.model.drivers.Driver
+import com.marquinhosmorales.f1hub.network.DriversApiService
 import kotlinx.serialization.SerializationException
 import retrofit2.HttpException
 
-class DriverRepositoryImpl(
-    private val apiService: DriverApiService
-) : DriverRepository {
+class DriversRepositoryImpl(
+    private val apiService: DriversApiService
+) : DriversRepository {
     override suspend fun getCurrentDrivers(): List<Driver> {
         return try {
             val response = apiService.getCurrentDrivers()

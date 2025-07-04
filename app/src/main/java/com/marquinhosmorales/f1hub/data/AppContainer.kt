@@ -1,8 +1,11 @@
 package com.marquinhosmorales.f1hub.data
 
-import com.marquinhosmorales.f1hub.data.drivers.DriverRepository
-import com.marquinhosmorales.f1hub.data.drivers.DriverRepositoryImpl
-import com.marquinhosmorales.f1hub.data.network.DriverApiService
+import com.marquinhosmorales.f1hub.data.drivers.DriversRepository
+import com.marquinhosmorales.f1hub.data.drivers.DriversRepositoryImpl
+import com.marquinhosmorales.f1hub.data.races.RacesRepository
+import com.marquinhosmorales.f1hub.data.races.RacesRepositoryImpl
+import com.marquinhosmorales.f1hub.network.DriversApiService
+import com.marquinhosmorales.f1hub.network.RacesApiService
 import kotlinx.serialization.json.Json
 import okhttp3.MediaType.Companion.toMediaType
 import okhttp3.OkHttpClient
@@ -12,7 +15,8 @@ import retrofit2.converter.kotlinx.serialization.asConverterFactory
 import retrofit2.create
 
 interface AppContainer {
-    val driverRepository: DriverRepository
+    val driversRepository: DriversRepository
+    val racesRepository: RacesRepository
 }
 
 class DefaultAppContainer : AppContainer {
@@ -37,9 +41,15 @@ class DefaultAppContainer : AppContainer {
         .addConverterFactory(json.asConverterFactory("application/json".toMediaType()))
         .build()
 
-    private val driverApiService: DriverApiService by lazy {
-        retrofit.create<DriverApiService>()
+    private val driversApiService: DriversApiService by lazy {
+        retrofit.create<DriversApiService>()
     }
 
-    override val driverRepository: DriverRepository = DriverRepositoryImpl(driverApiService)
+    private val racesApiService: RacesApiService by lazy {
+        retrofit.create<RacesApiService>()
+    }
+
+    override val driversRepository: DriversRepository = DriversRepositoryImpl(driversApiService)
+
+    override val racesRepository: RacesRepository = RacesRepositoryImpl(racesApiService)
 }

@@ -1,9 +1,9 @@
-package com.marquinhosmorales.f1hub.data.network
+package com.marquinhosmorales.f1hub.network
 
 import com.marquinhosmorales.f1hub.model.drivers.CurrentDriversResponse
 import retrofit2.http.GET
 
-interface DriverApiService {
+interface DriversApiService {
     @GET("api/current/drivers")
     suspend fun getCurrentDrivers(): CurrentDriversResponse
 }

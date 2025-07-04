@@ -19,7 +19,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.viewmodel.compose.viewModel
-import com.marquinhosmorales.f1hub.data.drivers.FakeDriverRepository
+import com.marquinhosmorales.f1hub.data.drivers.FakeDriversRepository
 import com.marquinhosmorales.f1hub.navigation.Screen
 import com.marquinhosmorales.f1hub.ui.components.F1HubTopBar
 import com.marquinhosmorales.f1hub.ui.screens.ErrorScreen
@@ -83,7 +83,7 @@ fun DriversScreenPreview() {
     F1HubTheme {
         DriversScreen(
             viewModel = viewModel(
-                factory = DriversViewModel.provideFactory(FakeDriverRepository()),
+                factory = DriversViewModel.provideFactory(FakeDriversRepository()),
             )
         )
     }
