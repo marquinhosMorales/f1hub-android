@@ -66,15 +66,15 @@ val mockSpain = Race(
     url = "https://en.wikipedia.org/wiki/2025_Spanish_Grand_Prix",
     schedule = RaceSchedule(
         race = RaceSession(
-            date = "2025-06-01",
+            date = "2026-06-01",
             time = "13:00:00Z"
         ),
         qualy = RaceSession(
-            date = "2025-05-31",
+            date = "2026-05-31",
             time = "14:00:00Z"
         ),
         fp1 = RaceSession(
-            date = "2025-05-30",
+            date = "2026-05-30",
             time = "11:30:00Z"
         ),
         fp2 = null,
