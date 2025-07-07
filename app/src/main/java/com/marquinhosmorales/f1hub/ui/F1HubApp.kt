@@ -22,6 +22,7 @@ import com.marquinhosmorales.f1hub.ui.screens.drivers.DriversViewModel
 import com.marquinhosmorales.f1hub.ui.screens.races.RacesScreen
 import com.marquinhosmorales.f1hub.ui.screens.races.RacesViewModel
 import com.marquinhosmorales.f1hub.ui.screens.standings.StandingsScreen
+import com.marquinhosmorales.f1hub.ui.screens.standings.StandingsViewModel
 import com.marquinhosmorales.f1hub.ui.theme.F1HubTheme
 
 @OptIn(ExperimentalMaterial3Api::class)
@@ -59,7 +60,10 @@ fun F1HubApp(
                 RacesScreen(racesViewModel)
             }
             composable(Screen.Standings.route) {
-                StandingsScreen()
+                val standingsViewModel: StandingsViewModel = viewModel(
+                    factory = StandingsViewModel.provideFactory(appContainer.standingsRepository),
+                )
+                StandingsScreen(standingsViewModel)
             }
         }
     }

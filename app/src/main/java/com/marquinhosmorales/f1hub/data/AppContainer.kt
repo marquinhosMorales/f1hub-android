@@ -4,8 +4,11 @@ import com.marquinhosmorales.f1hub.data.drivers.DriversRepository
 import com.marquinhosmorales.f1hub.data.drivers.DriversRepositoryImpl
 import com.marquinhosmorales.f1hub.data.races.RacesRepository
 import com.marquinhosmorales.f1hub.data.races.RacesRepositoryImpl
+import com.marquinhosmorales.f1hub.data.standings.StandingsRepository
+import com.marquinhosmorales.f1hub.data.standings.StandingsRepositoryImpl
 import com.marquinhosmorales.f1hub.network.DriversApiService
 import com.marquinhosmorales.f1hub.network.RacesApiService
+import com.marquinhosmorales.f1hub.network.StandingsApiService
 import kotlinx.serialization.json.Json
 import okhttp3.MediaType.Companion.toMediaType
 import okhttp3.OkHttpClient
@@ -17,6 +20,7 @@ import retrofit2.create
 interface AppContainer {
     val driversRepository: DriversRepository
     val racesRepository: RacesRepository
+    val standingsRepository: StandingsRepository
 }
 
 class DefaultAppContainer : AppContainer {
@@ -49,7 +53,14 @@ class DefaultAppContainer : AppContainer {
         retrofit.create<RacesApiService>()
     }
 
+    private val standingsApiService: StandingsApiService by lazy {
+        retrofit.create<StandingsApiService>()
+    }
+
     override val driversRepository: DriversRepository = DriversRepositoryImpl(driversApiService)
 
     override val racesRepository: RacesRepository = RacesRepositoryImpl(racesApiService)
+
+    override val standingsRepository: StandingsRepository =
+        StandingsRepositoryImpl(standingsApiService)
 }

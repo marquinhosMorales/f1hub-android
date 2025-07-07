@@ -5,7 +5,7 @@ import kotlinx.serialization.Serializable
 
 @Serializable
 data class Driver(
-    val driverId: String?,
+    val driverId: String? = null,
     val name: String,
     val surname: String,
     val nationality: String? = null,

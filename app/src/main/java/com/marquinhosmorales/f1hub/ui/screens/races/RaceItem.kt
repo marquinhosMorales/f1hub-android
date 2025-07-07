@@ -87,7 +87,7 @@ fun RaceItem(race: Race, modifier: Modifier = Modifier) {
     }
 }
 
-@Preview("RaceItem screen")
+@Preview("RaceItem")
 @Preview("RaceItem (dark)", uiMode = UI_MODE_NIGHT_YES)
 @Composable
 fun RaceItemPreview() {
