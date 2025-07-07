@@ -29,4 +29,27 @@ val mockNorrisEntry = StandingsEntry(
     driver = mockNorris
 )
 
+val mockRedBullEntry = StandingsEntry(
+    classificationId = 1,
+    teamId = TeamID.RedBull,
+    points = 125,
+    position = 1,
+    wins = 5,
+    team = mockRedBull,
+    driverId = null,
+    driver = null
+)
+
+val mockMcLarenEntry = StandingsEntry(
+    classificationId = 2,
+    teamId = TeamID.McLaren,
+    points = 75,
+    position = 2,
+    wins = 3,
+    team = mockMcLaren,
+    driverId = null,
+    driver = null
+)
+
 val mockDriversStandings = listOf(mockVerstappenEntry, mockNorrisEntry)
+val mockTeamsStandings = listOf(mockRedBullEntry, mockMcLarenEntry)

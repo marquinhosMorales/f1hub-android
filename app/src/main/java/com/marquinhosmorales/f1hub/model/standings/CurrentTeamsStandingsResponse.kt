@@ -4,9 +4,9 @@ import kotlinx.serialization.SerialName
 import kotlinx.serialization.Serializable
 
 @Serializable
-data class CurrentDriversStandingsResponse(
+data class CurrentTeamsStandingsResponse(
     val season: Int,
     val championshipId: String,
-    @SerialName("drivers_championship")
-    val driversStandings: List<StandingsEntry>
+    @SerialName("constructors_championship")
+    val teamsStandings: List<StandingsEntry>
 )

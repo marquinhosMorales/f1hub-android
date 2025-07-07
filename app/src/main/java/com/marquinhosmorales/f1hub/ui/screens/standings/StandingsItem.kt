@@ -20,7 +20,9 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import com.marquinhosmorales.f1hub.data.standings.mockMcLarenEntry
 import com.marquinhosmorales.f1hub.data.standings.mockNorrisEntry
+import com.marquinhosmorales.f1hub.data.standings.mockRedBullEntry
 import com.marquinhosmorales.f1hub.data.standings.mockVerstappenEntry
 import com.marquinhosmorales.f1hub.model.standings.StandingsEntry
 import com.marquinhosmorales.f1hub.ui.theme.F1HubTheme
@@ -54,21 +56,22 @@ fun StandingsItem(standingsEntry: StandingsEntry, modifier: Modifier = Modifier)
                     .background(standingsEntry.teamId.color())
             )
 
-            standingsEntry.driver?.let { driver ->
-                Column(
-                    modifier = Modifier.weight(1f)
-                ) {
+            Column(modifier = modifier.weight(1f)) {
+                standingsEntry.driver?.let { driver ->
                     Text(
                         text = "${driver.name} ${driver.surname}",
-                        style = MaterialTheme.typography.bodyLarge
+                        style = MaterialTheme.typography.bodyLarge,
+                        modifier = Modifier.padding(bottom = 4.dp)
                     )
-
                     Text(
                         text = standingsEntry.teamId.teamName(),
                         style = MaterialTheme.typography.labelLarge,
                         color = MaterialTheme.colorScheme.onSurfaceVariant
                     )
-                }
+                } ?: Text(
+                    text = standingsEntry.teamId.teamName(),
+                    style = MaterialTheme.typography.bodyLarge
+                )
             }
         }
     }
@@ -82,6 +85,8 @@ fun StandingsItemPreview() {
         Column {
             StandingsItem(mockVerstappenEntry)
             StandingsItem(mockNorrisEntry)
+            StandingsItem(mockRedBullEntry)
+            StandingsItem(mockMcLarenEntry)
         }
     }
 }

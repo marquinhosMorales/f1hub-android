@@ -13,8 +13,8 @@ data class StandingsEntry(
     val position: Int,
     val wins: Int?,
     val team: Team,
-    val driverId: String?,
-    val driver: Driver?
+    val driverId: String? = null,
+    val driver: Driver? = null
 ) {
     val id: String
         get() = classificationId.toString()
