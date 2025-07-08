@@ -38,7 +38,7 @@ fun RaceItem(race: Race, modifier: Modifier = Modifier) {
                 .fillMaxWidth()
                 .padding(16.dp),
             verticalAlignment = Alignment.CenterVertically,
-            horizontalArrangement = Arrangement.spacedBy(8.dp)
+            horizontalArrangement = Arrangement.spacedBy(16.dp)
         ) {
             Column(
                 horizontalAlignment = Alignment.CenterHorizontally

@@ -52,6 +52,6 @@ val Typography = Typography(
     labelSmall = TextStyle(
         fontFamily = Formula1,
         fontWeight = FontWeight.Normal,
-        fontSize = 12.sp
+        fontSize = 11.sp
     )
 )

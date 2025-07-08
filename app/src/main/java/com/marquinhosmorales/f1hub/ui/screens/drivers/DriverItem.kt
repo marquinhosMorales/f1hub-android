@@ -59,6 +59,7 @@ fun DriverItem(driver: Driver, modifier: Modifier = Modifier) {
             driver.teamId?.let { teamId ->
                 Box(
                     modifier = Modifier
+                        .padding(end = 4.dp)
                         .width(4.dp)
                         .height(36.dp)
                         .background(teamId.color())

@@ -17,6 +17,7 @@ import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
@@ -26,14 +27,22 @@ import com.marquinhosmorales.f1hub.data.standings.mockRedBullEntry
 import com.marquinhosmorales.f1hub.data.standings.mockVerstappenEntry
 import com.marquinhosmorales.f1hub.model.standings.StandingsEntry
 import com.marquinhosmorales.f1hub.ui.theme.F1HubTheme
+import com.marquinhosmorales.f1hub.ui.theme.standingsLeaderBackgroundColor
 
 @Composable
 fun StandingsItem(standingsEntry: StandingsEntry, modifier: Modifier = Modifier) {
+    val isLeader = standingsEntry.position == 1
+    val cardBackgroundColor =
+        if (isLeader) standingsLeaderBackgroundColor else MaterialTheme.colorScheme.surfaceContainerHigh
+    val primaryTextColor = if (isLeader) Color.White else MaterialTheme.colorScheme.onBackground
+    val secondaryTextColor = if (isLeader) Color.White else MaterialTheme.colorScheme.onSurface
+
     Card(
         modifier = modifier
             .fillMaxWidth()
             .padding(horizontal = 16.dp, vertical = 8.dp),
-        elevation = CardDefaults.cardElevation(defaultElevation = 2.dp)
+        elevation = CardDefaults.cardElevation(defaultElevation = 2.dp),
+        colors = CardDefaults.cardColors(containerColor = cardBackgroundColor)
     ) {
         Row(
             modifier = Modifier
@@ -46,11 +55,13 @@ fun StandingsItem(standingsEntry: StandingsEntry, modifier: Modifier = Modifier)
                 text = standingsEntry.position.toString(),
                 style = MaterialTheme.typography.bodyLarge,
                 modifier = Modifier.width(38.dp),
-                textAlign = TextAlign.Center
+                textAlign = TextAlign.Center,
+                color = primaryTextColor
             )
 
             Box(
                 modifier = Modifier
+                    .padding(end = 4.dp)
                     .width(4.dp)
                     .height(36.dp)
                     .background(standingsEntry.teamId.color())
@@ -61,18 +72,28 @@ fun StandingsItem(standingsEntry: StandingsEntry, modifier: Modifier = Modifier)
                     Text(
                         text = "${driver.name} ${driver.surname}",
                         style = MaterialTheme.typography.bodyLarge,
-                        modifier = Modifier.padding(bottom = 4.dp)
+                        modifier = Modifier.padding(bottom = 4.dp),
+                        color = primaryTextColor
                     )
                     Text(
                         text = standingsEntry.teamId.teamName(),
                         style = MaterialTheme.typography.labelLarge,
-                        color = MaterialTheme.colorScheme.onSurfaceVariant
+                        color = secondaryTextColor,
                     )
                 } ?: Text(
                     text = standingsEntry.teamId.teamName(),
-                    style = MaterialTheme.typography.bodyLarge
+                    style = MaterialTheme.typography.bodyLarge,
+                    color = primaryTextColor
                 )
             }
+
+            Text(
+                text = "${standingsEntry.points.toString()} PTS",
+                style = MaterialTheme.typography.bodySmall,
+                modifier = Modifier.weight(0.4f),
+                textAlign = TextAlign.End,
+                color = primaryTextColor
+            )
         }
     }
 }
