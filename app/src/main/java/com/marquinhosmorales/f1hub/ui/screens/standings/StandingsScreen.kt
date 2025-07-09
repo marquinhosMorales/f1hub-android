@@ -1,22 +1,12 @@
 package com.marquinhosmorales.f1hub.ui.screens.standings
 
 import android.content.res.Configuration.UI_MODE_NIGHT_YES
-import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.WindowInsets
 import androidx.compose.foundation.layout.fillMaxSize
-import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.systemBars
-import androidx.compose.foundation.lazy.LazyColumn
-import androidx.compose.foundation.lazy.items
 import androidx.compose.material3.ExperimentalMaterial3Api
-import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Scaffold
-import androidx.compose.material3.Tab
-import androidx.compose.material3.TabRow
-import androidx.compose.material3.TabRowDefaults
-import androidx.compose.material3.TabRowDefaults.tabIndicatorOffset
-import androidx.compose.material3.Text
 import androidx.compose.material3.pulltorefresh.PullToRefreshBox
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
@@ -25,17 +15,13 @@ import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableIntStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
-import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.tooling.preview.Preview
-import androidx.compose.ui.unit.dp
 import androidx.lifecycle.viewmodel.compose.viewModel
 import com.marquinhosmorales.f1hub.data.standings.FakeStandingsRepository
 import com.marquinhosmorales.f1hub.navigation.Screen
 import com.marquinhosmorales.f1hub.ui.components.F1HubTopBar
-import com.marquinhosmorales.f1hub.ui.screens.ErrorScreen
-import com.marquinhosmorales.f1hub.ui.screens.LoadingScreen
+import com.marquinhosmorales.f1hub.ui.components.TabbedContent
 import com.marquinhosmorales.f1hub.ui.theme.F1HubTheme
 import com.marquinhosmorales.f1hub.ui.theme.accentColor
 
@@ -66,66 +52,22 @@ fun StandingsScreen(
                 .fillMaxSize()
                 .padding(innerPadding)
         ) {
-            Column(
-                horizontalAlignment = Alignment.CenterHorizontally
-            ) {
-                TabRow(
-                    selectedTabIndex = selectedTabIndex,
-                    modifier = Modifier.fillMaxWidth(),
-                    containerColor = accentColor,
-                    indicator = { tabPositions ->
-                        TabRowDefaults.SecondaryIndicator(
-                            modifier = Modifier.tabIndicatorOffset(tabPositions[selectedTabIndex]),
-                            color = Color.White
-                        )
-                    }
-                ) {
-                    listOf("Drivers", "Teams").forEachIndexed { index, title ->
-                        Tab(
-                            selected = selectedTabIndex == index,
-                            onClick = { selectedTabIndex = index },
-                            text = {
-                                Text(
-                                    text = title,
-                                    style = if (selectedTabIndex == index) {
-                                        MaterialTheme.typography.bodyMedium
-                                    } else {
-                                        MaterialTheme.typography.labelLarge
-                                    },
-                                    color = if (selectedTabIndex == index) {
-                                        Color.White
-                                    } else {
-                                        Color.White.copy(alpha = 0.6f)
-                                    }
-                                )
-                            }
-                        )
-                    }
+            TabbedContent(
+                tabs = listOf("Drivers", "Teams"),
+                selectedTabIndex = selectedTabIndex,
+                onTabSelected = { selectedTabIndex = it },
+                uiState = uiState,
+                accentColor = accentColor,
+                getItems = { state, tabIndex ->
+                    standings
+                },
+                itemContent = { standingsEntry ->
+                    StandingsItem(standingsEntry)
+                },
+                itemKey = { standingsEntry ->
+                    standingsEntry.id
                 }
-
-                when {
-                    uiState.isLoading && !uiState.isRefreshing -> {
-                        LoadingScreen()
-                    }
-
-                    uiState.error != null -> {
-                        ErrorScreen(uiState.error)
-                    }
-
-                    else -> {
-                        LazyColumn(
-                            modifier = Modifier
-                                .fillMaxSize()
-                                .padding(vertical = 8.dp),
-                            horizontalAlignment = Alignment.CenterHorizontally
-                        ) {
-                            items(standings, key = { it.id }) { standingEntry ->
-                                StandingsItem(standingEntry)
-                            }
-                        }
-                    }
-                }
-            }
+            )
         }
     }
 }
