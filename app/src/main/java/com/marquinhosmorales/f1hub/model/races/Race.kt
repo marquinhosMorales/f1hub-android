@@ -14,7 +14,7 @@ data class Race(
     val raceId: String,
     val championshipId: String,
     val raceName: String,
-    val laps: Int,
+    val laps: Int?,
     val round: Int,
     val url: String,
     val schedule: RaceSchedule,
