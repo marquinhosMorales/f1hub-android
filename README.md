@@ -22,7 +22,7 @@ To build and run F1 Hub app follow these steps:
 - Sync the project with Gradle by clicking `Sync Project with Gradle Files`.
 
 **Install Dependencies**:
-- Ensure all dependencies listed in `build.gradle` are downloaded. Android Studio will handle this automatically during the sync process.
+- Ensure all dependencies listed in `build.gradle.kts` are downloaded. Android Studio will handle this automatically during the sync process.
 
 **Run the App**:
 - Connect an Android device or start an emulator.
