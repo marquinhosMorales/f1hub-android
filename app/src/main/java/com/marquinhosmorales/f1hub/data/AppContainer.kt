@@ -9,6 +9,7 @@ import com.marquinhosmorales.f1hub.data.standings.StandingsRepositoryImpl
 import com.marquinhosmorales.f1hub.network.DriversApiService
 import com.marquinhosmorales.f1hub.network.RacesApiService
 import com.marquinhosmorales.f1hub.network.StandingsApiService
+import com.marquinhosmorales.f1hub.network.WikipediaApiService
 import kotlinx.serialization.json.Json
 import okhttp3.MediaType.Companion.toMediaType
 import okhttp3.OkHttpClient
@@ -24,7 +25,8 @@ interface AppContainer {
 }
 
 class DefaultAppContainer : AppContainer {
-    private val baseUrl = "https://f1api.dev/"
+    private val f1BaseUrl = "https://f1api.dev/"
+    private val wikiBaseUrl = "https://en.wikipedia.org/"
 
     private val json = Json {
         ignoreUnknownKeys = true // Ignores unknown fields in JSON
@@ -39,25 +41,46 @@ class DefaultAppContainer : AppContainer {
         .addInterceptor(logging)
         .build()
 
-    private val retrofit = Retrofit.Builder()
-        .baseUrl(baseUrl)
+    private val wikiClient = OkHttpClient.Builder()
+        .addInterceptor(logging)
+        .addInterceptor { chain ->
+            val request = chain.request().newBuilder()
+                .header("User-Agent", "F1Hub/1.0")
+                .build()
+            chain.proceed(request)
+        }
+        .build()
+
+    private val f1Retrofit = Retrofit.Builder()
+        .baseUrl(f1BaseUrl)
         .client(client)
         .addConverterFactory(json.asConverterFactory("application/json".toMediaType()))
         .build()
 
+    private val wikiRetrofit = Retrofit.Builder()
+        .baseUrl(wikiBaseUrl)
+        .client(wikiClient)
+        .addConverterFactory(json.asConverterFactory("application/json".toMediaType()))
+        .build()
+
     private val driversApiService: DriversApiService by lazy {
-        retrofit.create<DriversApiService>()
+        f1Retrofit.create<DriversApiService>()
+    }
+
+    private val wikiApiService: WikipediaApiService by lazy {
+        wikiRetrofit.create<WikipediaApiService>()
     }
 
     private val racesApiService: RacesApiService by lazy {
-        retrofit.create<RacesApiService>()
+        f1Retrofit.create<RacesApiService>()
     }
 
     private val standingsApiService: StandingsApiService by lazy {
-        retrofit.create<StandingsApiService>()
+        f1Retrofit.create<StandingsApiService>()
     }
 
-    override val driversRepository: DriversRepository = DriversRepositoryImpl(driversApiService)
+    override val driversRepository: DriversRepository =
+        DriversRepositoryImpl(driversApiService, wikiApiService)
 
     override val racesRepository: RacesRepository = RacesRepositoryImpl(racesApiService)
 

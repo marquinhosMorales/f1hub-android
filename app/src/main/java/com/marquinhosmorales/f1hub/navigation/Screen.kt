@@ -25,6 +25,17 @@ sealed interface Screen {
         override val icon = R.drawable.ic_trophy
     }
 
+    data class DriverDetail(val driverId: String, val wikiUrl: String = "") : Screen {
+        override val route = "driver_detail/{driverId}/{wikiUrl}"
+        override val title = "Driver Detail"
+        override val icon: Int? = null
+
+        companion object {
+            fun createRoute(driverId: String, wikiUrl: String) =
+                "driver_detail/$driverId/${android.net.Uri.encode(wikiUrl)}"
+        }
+    }
+
     companion object {
         val bottomNavScreens = listOf(Drivers, Races, Standings)
     }

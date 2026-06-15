@@ -30,7 +30,11 @@ import com.marquinhosmorales.f1hub.ui.theme.F1HubTheme
 import com.marquinhosmorales.f1hub.ui.theme.standingsLeaderBackgroundColor
 
 @Composable
-fun StandingsItem(standingsEntry: StandingsEntry, modifier: Modifier = Modifier) {
+fun StandingsItem(
+    standingsEntry: StandingsEntry,
+    modifier: Modifier = Modifier,
+    onClick: (String, String) -> Unit = { _, _ -> }
+) {
     val isLeader = standingsEntry.position == 1
     val cardBackgroundColor =
         if (isLeader) standingsLeaderBackgroundColor else MaterialTheme.colorScheme.surfaceContainerHigh
@@ -42,7 +46,8 @@ fun StandingsItem(standingsEntry: StandingsEntry, modifier: Modifier = Modifier)
             .fillMaxWidth()
             .padding(horizontal = 16.dp, vertical = 8.dp),
         elevation = CardDefaults.cardElevation(defaultElevation = 2.dp),
-        colors = CardDefaults.cardColors(containerColor = cardBackgroundColor)
+        colors = CardDefaults.cardColors(containerColor = cardBackgroundColor),
+        onClick = { standingsEntry.driverId?.let { onClick(it, standingsEntry.driver?.url ?: "") } }
     ) {
         Row(
             modifier = Modifier

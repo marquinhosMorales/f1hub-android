@@ -12,6 +12,9 @@ retrofit = "3.0.0"
 okhttp = "4.12.0"
 kotlinxSerialization = "1.9.0"
 composeBom = "2025.06.01"
+coil = "2.6.0"
+coil-transformations = "2.0.2"
+google-mlkit-face-detection = "17.1.0"
 
 [libraries]
 androidx-core-ktx = { group = "androidx.core", name = "core-ktx", version.ref = "coreKtx" }
@@ -35,6 +38,9 @@ retrofit-converter-kotlinx-serialization = { group = "com.squareup.retrofit2", n
 okhttp = { group = "com.squareup.okhttp3", name = "okhttp", version.ref = "okhttp" }
 okhttp-logging-interceptor = { group = "com.squareup.okhttp3", name = "logging-interceptor", version.ref = "okhttp" }
 kotlinx-serialization-json = { group = "org.jetbrains.kotlinx", name = "kotlinx-serialization-json", version.ref = "kotlinxSerialization" }
+coil-compose = { group = "io.coil-kt", name = "coil-compose", version.ref = "coil" }
+coil-transformations-face-detection = { group = "com.github.Commit451.coil-transformations", name = "transformations-face-detection", version.ref = "coil-transformations" }
+google-mlkit-face-detection = { group = "com.google.android.gms", name = "play-services-mlkit-face-detection", version.ref = "google-mlkit-face-detection" }
 
 [plugins]
 android-application = { id = "com.android.application", version.ref = "agp" }

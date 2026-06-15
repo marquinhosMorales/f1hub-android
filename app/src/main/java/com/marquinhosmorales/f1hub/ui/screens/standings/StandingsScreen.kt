@@ -28,7 +28,8 @@ import com.marquinhosmorales.f1hub.ui.theme.accentColor
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun StandingsScreen(
-    viewModel: StandingsViewModel
+    viewModel: StandingsViewModel,
+    onDriverClick: (String, String) -> Unit = { _, _ -> }
 ) {
     val uiState by viewModel.uiState.collectAsState()
     var selectedTabIndex by remember { mutableIntStateOf(0) }
@@ -62,7 +63,11 @@ fun StandingsScreen(
                     standings
                 },
                 itemContent = { standingsEntry ->
-                    StandingsItem(standingsEntry)
+                    StandingsItem(standingsEntry, onClick = { driverId, wikiUrl ->
+                        if (selectedTabIndex == 0) {
+                            onDriverClick(driverId, wikiUrl)
+                        }
+                    })
                 },
                 itemKey = { standingsEntry ->
                     standingsEntry.id

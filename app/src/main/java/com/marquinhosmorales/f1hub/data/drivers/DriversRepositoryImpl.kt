@@ -2,16 +2,19 @@ package com.marquinhosmorales.f1hub.data.drivers
 
 import android.util.Log
 import com.marquinhosmorales.f1hub.model.drivers.Driver
+import com.marquinhosmorales.f1hub.model.wikipedia.WikipediaSummary
 import com.marquinhosmorales.f1hub.network.DriversApiService
+import com.marquinhosmorales.f1hub.network.WikipediaApiService
 import kotlinx.serialization.SerializationException
 import retrofit2.HttpException
 
 class DriversRepositoryImpl(
-    private val apiService: DriversApiService
+    private val f1ApiService: DriversApiService,
+    private val wikiApiService: WikipediaApiService
 ) : DriversRepository {
     override suspend fun getCurrentDrivers(): List<Driver> {
         return try {
-            val response = apiService.getCurrentDrivers()
+            val response = f1ApiService.getCurrentDrivers()
             Log.d("DriverRepository", "API response: $response")
             response.drivers
         } catch (e: SerializationException) {
@@ -24,5 +27,19 @@ class DriversRepositoryImpl(
             Log.e("DriverRepository", "Unexpected error: ${e.message}", e)
             throw Exception("Unexpected error: ${e.message}", e)
         }
+    }
+
+    override suspend fun getDriverDetail(driverId: String): Driver? {
+        return try {
+            val response = f1ApiService.getDriverDetail(driverId)
+            response.drivers.firstOrNull()
+        } catch (e: Exception) {
+            Log.e("DriverRepository", "Error fetching driver $driverId: ${e.message}", e)
+            null
+        }
+    }
+
+    override suspend fun getWikipediaSummary(title: String): WikipediaSummary {
+        return wikiApiService.getPageSummary(title)
     }
 }

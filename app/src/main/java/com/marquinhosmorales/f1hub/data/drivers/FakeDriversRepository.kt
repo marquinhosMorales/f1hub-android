@@ -1,19 +1,22 @@
 package com.marquinhosmorales.f1hub.data.drivers
 
 import com.marquinhosmorales.f1hub.model.drivers.Driver
-import kotlinx.coroutines.delay
+import com.marquinhosmorales.f1hub.model.wikipedia.WikipediaSummary
 
 class FakeDriversRepository : DriversRepository {
     override suspend fun getCurrentDrivers(): List<Driver> {
         return mockDrivers
     }
-}
 
-class FakeNetworkDriversRepository : DriversRepository {
-    override suspend fun getCurrentDrivers(): List<Driver> {
-        // Simulate 1-second network delay
-        delay(1000L)
+    override suspend fun getDriverDetail(driverId: String): Driver? {
+        return mockDrivers.find { it.id == driverId }
+    }
 
-        return mockDrivers
+    override suspend fun getWikipediaSummary(title: String): WikipediaSummary {
+        return WikipediaSummary(
+            title = title,
+            description = "Fake description for $title",
+            extract = "Fake bio for $title"
+        )
     }
 }

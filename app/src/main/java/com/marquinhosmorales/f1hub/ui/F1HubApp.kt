@@ -10,15 +10,19 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavHostController
+import androidx.navigation.NavType
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
+import androidx.navigation.navArgument
 import com.marquinhosmorales.f1hub.data.AppContainer
 import com.marquinhosmorales.f1hub.data.FakeAppContainer
 import com.marquinhosmorales.f1hub.navigation.Screen
 import com.marquinhosmorales.f1hub.ui.components.F1HubBottomNavigation
 import com.marquinhosmorales.f1hub.ui.screens.drivers.DriversScreen
 import com.marquinhosmorales.f1hub.ui.screens.drivers.DriversViewModel
+import com.marquinhosmorales.f1hub.ui.screens.drivers.driverDetail.DriverDetailScreen
+import com.marquinhosmorales.f1hub.ui.screens.drivers.driverDetail.DriverDetailViewModel
 import com.marquinhosmorales.f1hub.ui.screens.races.RacesScreen
 import com.marquinhosmorales.f1hub.ui.screens.races.RacesViewModel
 import com.marquinhosmorales.f1hub.ui.screens.standings.StandingsScreen
@@ -51,7 +55,9 @@ fun F1HubApp(
                 val driversViewModel: DriversViewModel = viewModel(
                     factory = DriversViewModel.provideFactory(appContainer.driversRepository),
                 )
-                DriversScreen(driversViewModel)
+                DriversScreen(driversViewModel, onDriverClick = { driverId, wikiUrl ->
+                    navController.navigate(Screen.DriverDetail.createRoute(driverId, wikiUrl))
+                })
             }
             composable(Screen.Races.route) {
                 val racesViewModel: RacesViewModel = viewModel(
@@ -63,7 +69,30 @@ fun F1HubApp(
                 val standingsViewModel: StandingsViewModel = viewModel(
                     factory = StandingsViewModel.provideFactory(appContainer.standingsRepository),
                 )
-                StandingsScreen(standingsViewModel)
+                StandingsScreen(standingsViewModel, onDriverClick = { driverId, wikiUrl ->
+                    navController.navigate(Screen.DriverDetail.createRoute(driverId, wikiUrl))
+                })
+            }
+            composable(
+                route = Screen.DriverDetail("").route,
+                arguments = listOf(
+                    navArgument("driverId") { type = NavType.StringType },
+                    navArgument("wikiUrl") { type = NavType.StringType }
+                )
+            ) { backStackEntry ->
+                val driverId = backStackEntry.arguments?.getString("driverId") ?: ""
+                val wikiUrl = backStackEntry.arguments?.getString("wikiUrl") ?: ""
+                val driverDetailViewModel: DriverDetailViewModel = viewModel(
+                    factory = DriverDetailViewModel.provideFactory(
+                        appContainer.driversRepository,
+                        driverId,
+                        wikiUrl
+                    ),
+                )
+                DriverDetailScreen(
+                    viewModel = driverDetailViewModel,
+                    navigateUp = { navController.navigateUp() }
+                )
             }
         }
     }
