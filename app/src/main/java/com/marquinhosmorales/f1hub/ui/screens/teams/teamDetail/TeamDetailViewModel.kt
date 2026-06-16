@@ -1,12 +1,12 @@
-package com.marquinhosmorales.f1hub.ui.screens.drivers.driverDetail
+package com.marquinhosmorales.f1hub.ui.screens.teams.teamDetail
 
 import android.net.Uri
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.viewModelScope
-import com.marquinhosmorales.f1hub.data.drivers.DriversRepository
+import com.marquinhosmorales.f1hub.data.teams.TeamsRepository
 import com.marquinhosmorales.f1hub.data.wikipedia.WikipediaRepository
-import com.marquinhosmorales.f1hub.model.drivers.Driver
+import com.marquinhosmorales.f1hub.model.teams.Team
 import com.marquinhosmorales.f1hub.model.wikipedia.WikipediaSummary
 import com.marquinhosmorales.f1hub.ui.screens.BaseUiState
 import kotlinx.coroutines.async
@@ -16,35 +16,35 @@ import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.launch
 
-data class DriverDetailUiState(
+data class TeamDetailUiState(
     override val isLoading: Boolean = false,
     override val isRefreshing: Boolean = false,
     override val error: String? = null,
-    val driver: Driver? = null,
+    val team: Team? = null,
     val wikiSummary: WikipediaSummary? = null
 ) : BaseUiState(isLoading, isRefreshing, error)
 
-class DriverDetailViewModel(
-    private val driversRepository: DriversRepository,
+class TeamDetailViewModel(
+    private val teamsRepository: TeamsRepository,
     private val wikipediaRepository: WikipediaRepository,
-    private val driverId: String,
+    private val teamId: String,
     val wikiUrl: String
 ) : ViewModel() {
-    private val _uiState = MutableStateFlow(DriverDetailUiState())
-    val uiState: StateFlow<DriverDetailUiState> = _uiState.asStateFlow()
+    private val _uiState = MutableStateFlow(TeamDetailUiState())
+    val uiState: StateFlow<TeamDetailUiState> = _uiState.asStateFlow()
 
     init {
-        fetchDriverDetail()
+        fetchTeamDetail()
     }
 
-    private fun fetchDriverDetail() {
+    private fun fetchTeamDetail() {
         viewModelScope.launch {
-            _uiState.value = DriverDetailUiState(isLoading = true)
+            _uiState.value = TeamDetailUiState(isLoading = true)
             try {
                 coroutineScope {
                     val wikiTitle = extractTitle(wikiUrl)
 
-                    val driverDeferred = async { driversRepository.getDriverDetail(driverId) }
+                    val teamDeferred = async { teamsRepository.getTeamDetail(teamId) }
                     val wikiDeferred = async {
                         try {
                             if (wikiTitle.isNotEmpty()) {
@@ -57,21 +57,21 @@ class DriverDetailViewModel(
                         }
                     }
 
-                    val driver = driverDeferred.await()
+                    val team = teamDeferred.await()
                     val wikiSummary = wikiDeferred.await()
 
-                    if (driver != null) {
-                        _uiState.value = DriverDetailUiState(
-                            driver = driver,
+                    if (team != null) {
+                        _uiState.value = TeamDetailUiState(
+                            team = team,
                             wikiSummary = wikiSummary
                         )
                     } else {
-                        _uiState.value = DriverDetailUiState(error = "Driver not found")
+                        _uiState.value = TeamDetailUiState(error = "Team not found")
                     }
                 }
             } catch (e: Exception) {
                 _uiState.value =
-                    DriverDetailUiState(error = e.message ?: "Failed to load driver details")
+                    TeamDetailUiState(error = e.message ?: "Failed to load team details")
             }
         }
     }
@@ -87,18 +87,18 @@ class DriverDetailViewModel(
 
     companion object {
         fun provideFactory(
-            driversRepository: DriversRepository,
+            teamsRepository: TeamsRepository,
             wikipediaRepository: WikipediaRepository,
-            driverId: String,
+            teamId: String,
             wikiUrl: String
         ): ViewModelProvider.Factory =
             object : ViewModelProvider.Factory {
                 @Suppress("UNCHECKED_CAST")
                 override fun <T : ViewModel> create(modelClass: Class<T>): T {
-                    return DriverDetailViewModel(
-                        driversRepository,
+                    return TeamDetailViewModel(
+                        teamsRepository,
                         wikipediaRepository,
-                        driverId,
+                        teamId,
                         wikiUrl
                     ) as T
                 }

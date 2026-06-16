@@ -1,7 +1,7 @@
 package com.marquinhosmorales.f1hub.model.races
 
 import com.marquinhosmorales.f1hub.model.Circuit
-import com.marquinhosmorales.f1hub.model.Team
+import com.marquinhosmorales.f1hub.model.teams.Team
 import com.marquinhosmorales.f1hub.model.drivers.Driver
 import kotlinx.serialization.SerialName
 import kotlinx.serialization.Serializable

@@ -1,4 +1,4 @@
-package com.marquinhosmorales.f1hub.ui.screens.drivers.driverDetail
+package com.marquinhosmorales.f1hub.ui.screens.teams.teamDetail
 
 import android.content.res.Configuration.UI_MODE_NIGHT_YES
 import androidx.compose.foundation.layout.Box
@@ -20,17 +20,18 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalUriHandler
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.lifecycle.viewmodel.compose.viewModel
-import com.marquinhosmorales.f1hub.data.drivers.FakeDriversRepository
-import com.marquinhosmorales.f1hub.data.drivers.mockVerstappen
+import com.marquinhosmorales.f1hub.data.teams.FakeTeamsRepository
+import com.marquinhosmorales.f1hub.data.teams.mockRedBull
 import com.marquinhosmorales.f1hub.data.wikipedia.FakeWikipediaRepository
+import com.marquinhosmorales.f1hub.model.teams.TeamID
 import com.marquinhosmorales.f1hub.ui.components.F1HubTopBar
 import com.marquinhosmorales.f1hub.ui.screens.ErrorScreen
 import com.marquinhosmorales.f1hub.ui.screens.LoadingScreen
 import com.marquinhosmorales.f1hub.ui.theme.F1HubTheme
 
 @Composable
-fun DriverDetailScreen(
-    viewModel: DriverDetailViewModel,
+fun TeamDetailScreen(
+    viewModel: TeamDetailViewModel,
     navigateUp: () -> Unit
 ) {
     val uiState by viewModel.uiState.collectAsState()
@@ -64,22 +65,20 @@ fun DriverDetailScreen(
             when {
                 uiState.isLoading -> LoadingScreen()
                 uiState.error != null -> ErrorScreen(uiState.error)
-                uiState.driver != null -> {
+                uiState.team != null -> {
                     Column(
                         modifier = Modifier
                             .fillMaxSize()
                             .verticalScroll(rememberScrollState())
                     ) {
-                        val driver = uiState.driver!!
-                        DriverDetailHeader(
-                            number = driver.number,
-                            name = driver.name,
-                            surname = driver.surname,
+                        val team = uiState.team!!
+                        TeamDetailHeader(
+                            team = team,
                             imageUrl = uiState.wikiSummary?.originalimage?.source
                                 ?: uiState.wikiSummary?.thumbnail?.source
                         )
-                        DriverDetailBody(
-                            driver = driver,
+                        TeamDetailBody(
+                            team = team,
                             biography = uiState.wikiSummary?.extract
                         )
                     }
@@ -89,18 +88,18 @@ fun DriverDetailScreen(
     }
 }
 
-@Preview("Driver Detail Screen")
-@Preview("Driver Detail Screen (dark)", uiMode = UI_MODE_NIGHT_YES)
+@Preview("Team Detail Screen")
+@Preview("Team Detail Screen (dark)", uiMode = UI_MODE_NIGHT_YES)
 @Composable
-fun DriverDetailScreenPreview() {
+fun TeamDetailScreenPreview() {
     F1HubTheme {
-        DriverDetailScreen(
+        TeamDetailScreen(
             viewModel = viewModel(
-                factory = DriverDetailViewModel.provideFactory(
-                    FakeDriversRepository(),
+                factory = TeamDetailViewModel.provideFactory(
+                    FakeTeamsRepository(),
                     FakeWikipediaRepository(),
-                    mockVerstappen.id,
-                    mockVerstappen.url
+                    TeamID.RedBull.id,
+                    mockRedBull.url
                 )
             ),
             navigateUp = {}

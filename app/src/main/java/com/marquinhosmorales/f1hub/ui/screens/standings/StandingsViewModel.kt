@@ -19,6 +19,7 @@ data class StandingsUiState(
     override val error: String? = null,
     val driversStandings: List<StandingsEntry> = emptyList(),
     val teamsStandings: List<StandingsEntry> = emptyList(),
+    val selectedTabIndex: Int = 0
 ) : BaseUiState(isLoading, isRefreshing, error)
 
 class StandingsViewModel(
@@ -31,6 +32,10 @@ class StandingsViewModel(
         fetchCurrentStandings()
     }
 
+    fun updateSelectedTab(index: Int) {
+        _uiState.value = _uiState.value.copy(selectedTabIndex = index)
+    }
+
     fun refreshDriversStandings() {
         fetchCurrentDriversStandings(isRefreshing = true)
     }
@@ -41,7 +46,7 @@ class StandingsViewModel(
 
     private fun fetchCurrentStandings() {
         viewModelScope.launch {
-            _uiState.value = StandingsUiState(
+            _uiState.value = _uiState.value.copy(
                 isLoading = true
             )
             try {
@@ -55,13 +60,15 @@ class StandingsViewModel(
                     val teamsStandings = teamsDeferred.await()
 
                     // Update UI state with both standings
-                    _uiState.value = StandingsUiState(
+                    _uiState.value = _uiState.value.copy(
+                        isLoading = false,
                         driversStandings = driversStandings,
                         teamsStandings = teamsStandings
                     )
                 }
             } catch (e: Exception) {
-                _uiState.value = StandingsUiState(
+                _uiState.value = _uiState.value.copy(
+                    isLoading = false,
                     error = e.message ?: "Failed to load standings"
                 )
             }
@@ -70,20 +77,21 @@ class StandingsViewModel(
 
     private fun fetchCurrentDriversStandings(isRefreshing: Boolean = false) {
         viewModelScope.launch {
-            _uiState.value = StandingsUiState(
+            _uiState.value = _uiState.value.copy(
                 isLoading = true,
-                isRefreshing = isRefreshing,
-                teamsStandings = _uiState.value.teamsStandings
+                isRefreshing = isRefreshing
             )
             try {
                 val driversStandings = standingsRepository.getCurrentDriversStandings()
-                _uiState.value = StandingsUiState(
-                    driversStandings = driversStandings,
-                    teamsStandings = _uiState.value.teamsStandings
+                _uiState.value = _uiState.value.copy(
+                    isLoading = false,
+                    isRefreshing = false,
+                    driversStandings = driversStandings
                 )
             } catch (e: Exception) {
-                _uiState.value = StandingsUiState(
-                    teamsStandings = _uiState.value.teamsStandings,
+                _uiState.value = _uiState.value.copy(
+                    isLoading = false,
+                    isRefreshing = false,
                     error = e.message ?: "Failed to load drivers standings"
                 )
             }
@@ -92,20 +100,21 @@ class StandingsViewModel(
 
     private fun fetchCurrentTeamsStandings(isRefreshing: Boolean = false) {
         viewModelScope.launch {
-            _uiState.value = StandingsUiState(
+            _uiState.value = _uiState.value.copy(
                 isLoading = true,
-                isRefreshing = isRefreshing,
-                driversStandings = _uiState.value.driversStandings
+                isRefreshing = isRefreshing
             )
             try {
                 val teamsStandings = standingsRepository.getCurrentTeamsStandings()
-                _uiState.value = StandingsUiState(
-                    driversStandings = _uiState.value.driversStandings,
+                _uiState.value = _uiState.value.copy(
+                    isLoading = false,
+                    isRefreshing = false,
                     teamsStandings = teamsStandings
                 )
             } catch (e: Exception) {
-                _uiState.value = StandingsUiState(
-                    driversStandings = _uiState.value.driversStandings,
+                _uiState.value = _uiState.value.copy(
+                    isLoading = false,
+                    isRefreshing = false,
                     error = e.message ?: "Failed to load teams standings"
                 )
             }

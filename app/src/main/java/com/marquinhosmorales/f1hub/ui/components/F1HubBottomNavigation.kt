@@ -11,6 +11,8 @@ import androidx.compose.runtime.getValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.tooling.preview.Preview
+import androidx.navigation.NavDestination.Companion.hierarchy
+import androidx.navigation.NavGraph.Companion.findStartDestination
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.currentBackStackEntryAsState
 import androidx.navigation.compose.rememberNavController
@@ -22,15 +24,24 @@ import com.marquinhosmorales.f1hub.ui.theme.accentColor
 fun F1HubBottomNavigation(
     navController: NavHostController,
     modifier: Modifier = Modifier,
-    currentDestination: String? = null,
 ) {
-    val currentRoute by navController.currentBackStackEntryAsState()
-    val currentDestination = currentDestination ?: currentRoute?.destination?.route
+    val navBackStackEntry by navController.currentBackStackEntryAsState()
+    val currentDestinationNode = navBackStackEntry?.destination
 
     NavigationBar(
         modifier = modifier
     ) {
         Screen.bottomNavScreens.forEach { screen ->
+            val graphRoute = when (screen) {
+                Screen.Drivers -> Screen.DRIVERS_GRAPH
+                Screen.Races -> Screen.RACES_GRAPH
+                Screen.Standings -> Screen.STANDINGS_GRAPH
+                else -> screen.route
+            }
+
+            val isSelected =
+                currentDestinationNode?.hierarchy?.any { it.route == graphRoute } == true
+
             NavigationBarItem(
                 icon = {
                     screen.icon?.let { iconRes ->
@@ -41,15 +52,21 @@ fun F1HubBottomNavigation(
                     }
                 },
                 label = { Text(screen.title) },
-                selected = currentDestination == screen.route,
+                selected = isSelected,
                 onClick = {
-                    if (currentDestination != screen.route) {
-                        Log.d("F1HubBottomNavigation", "Navigating to: ${screen.route}")
-                        navController.navigate(screen.route) {
-                            popUpTo(navController.graph.startDestinationId) {
+                    if (!isSelected) {
+                        Log.d("F1HubBottomNavigation", "Navigating to graph: $graphRoute")
+                        navController.navigate(graphRoute) {
+                            // Pop up to the start destination of the graph to
+                            // avoid building up a large stack of destinations
+                            // on the back stack as users select items
+                            popUpTo(navController.graph.findStartDestination().id) {
                                 saveState = true
                             }
+                            // Avoid multiple copies of the same destination when
+                            // reselecting the same item
                             launchSingleTop = true
+                            // Restore state when reselecting a previously selected item
                             restoreState = true
                         }
                     }
@@ -70,8 +87,7 @@ fun F1HubBottomNavigationPreview() {
     F1HubTheme {
         F1HubBottomNavigation(
             navController = rememberNavController(),
-            modifier = Modifier,
-            currentDestination = Screen.Drivers.route
+            modifier = Modifier
         )
     }
 }
@@ -82,8 +98,7 @@ fun F1HubBottomNavigationDarkPreview() {
     F1HubTheme(darkTheme = true) {
         F1HubBottomNavigation(
             navController = rememberNavController(),
-            modifier = Modifier,
-            currentDestination = Screen.Drivers.route
+            modifier = Modifier
         )
     }
 }

@@ -47,7 +47,11 @@ fun StandingsItem(
             .padding(horizontal = 16.dp, vertical = 8.dp),
         elevation = CardDefaults.cardElevation(defaultElevation = 2.dp),
         colors = CardDefaults.cardColors(containerColor = cardBackgroundColor),
-        onClick = { standingsEntry.driverId?.let { onClick(it, standingsEntry.driver?.url ?: "") } }
+        onClick = {
+            val id = standingsEntry.driverId ?: standingsEntry.teamId.id
+            val wikiUrl = standingsEntry.driver?.url ?: standingsEntry.team.url
+            onClick(id, wikiUrl)
+        }
     ) {
         Row(
             modifier = Modifier

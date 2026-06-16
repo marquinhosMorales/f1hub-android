@@ -1,6 +1,6 @@
 package com.marquinhosmorales.f1hub.model.races
 
-import com.marquinhosmorales.f1hub.model.TeamID
+import com.marquinhosmorales.f1hub.model.teams.TeamID
 import kotlinx.serialization.SerialName
 import kotlinx.serialization.Serializable
 

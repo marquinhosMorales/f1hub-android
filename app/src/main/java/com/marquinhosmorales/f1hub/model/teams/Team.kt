@@ -1,4 +1,4 @@
-package com.marquinhosmorales.f1hub.model
+package com.marquinhosmorales.f1hub.model.teams
 
 import androidx.compose.ui.graphics.Color
 import com.marquinhosmorales.f1hub.ui.theme.alpine
@@ -12,6 +12,7 @@ import com.marquinhosmorales.f1hub.ui.theme.redBull
 import com.marquinhosmorales.f1hub.ui.theme.sauber
 import com.marquinhosmorales.f1hub.ui.theme.williams
 import kotlinx.serialization.KSerializer
+import kotlinx.serialization.SerialName
 import kotlinx.serialization.Serializable
 import kotlinx.serialization.descriptors.PrimitiveKind
 import kotlinx.serialization.descriptors.PrimitiveSerialDescriptor
@@ -23,7 +24,9 @@ import kotlinx.serialization.encoding.Encoder
 data class Team(
     val teamId: TeamID? = null,
     val teamName: String,
-    val country: String,
+    val country: String? = null,
+    val teamNationality: String? = null,
+    @SerialName("firstAppeareance")
     val firstAppearance: Int? = null,
     val constructorsChampionships: Int? = null,
     val driversChampionships: Int? = null,
@@ -84,7 +87,8 @@ enum class TeamID(val id: String) {
 }
 
 object TeamIDSerializer : KSerializer<TeamID> {
-    override val descriptor: SerialDescriptor = PrimitiveSerialDescriptor("TeamID", PrimitiveKind.STRING)
+    override val descriptor: SerialDescriptor =
+        PrimitiveSerialDescriptor("TeamID", PrimitiveKind.STRING)
 
     override fun serialize(encoder: Encoder, value: TeamID) {
         encoder.encodeString(value.id)

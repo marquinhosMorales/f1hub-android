@@ -1,7 +1,7 @@
 package com.marquinhosmorales.f1hub.data.teams
 
-import com.marquinhosmorales.f1hub.model.Team
-import com.marquinhosmorales.f1hub.model.TeamID
+import com.marquinhosmorales.f1hub.model.teams.Team
+import com.marquinhosmorales.f1hub.model.teams.TeamID
 
 val mockRedBull = Team(
     teamId = TeamID.RedBull,

@@ -3,7 +3,7 @@ package com.marquinhosmorales.f1hub.data.races
 import com.marquinhosmorales.f1hub.data.drivers.mockNorris
 import com.marquinhosmorales.f1hub.data.teams.mockMcLaren
 import com.marquinhosmorales.f1hub.model.Circuit
-import com.marquinhosmorales.f1hub.model.TeamID
+import com.marquinhosmorales.f1hub.model.teams.TeamID
 import com.marquinhosmorales.f1hub.model.races.Race
 import com.marquinhosmorales.f1hub.model.races.RaceFastLap
 import com.marquinhosmorales.f1hub.model.races.RaceSchedule

@@ -2,15 +2,12 @@ package com.marquinhosmorales.f1hub.data.drivers
 
 import android.util.Log
 import com.marquinhosmorales.f1hub.model.drivers.Driver
-import com.marquinhosmorales.f1hub.model.wikipedia.WikipediaSummary
 import com.marquinhosmorales.f1hub.network.DriversApiService
-import com.marquinhosmorales.f1hub.network.WikipediaApiService
 import kotlinx.serialization.SerializationException
 import retrofit2.HttpException
 
 class DriversRepositoryImpl(
-    private val f1ApiService: DriversApiService,
-    private val wikiApiService: WikipediaApiService
+    private val f1ApiService: DriversApiService
 ) : DriversRepository {
     override suspend fun getCurrentDrivers(): List<Driver> {
         return try {
@@ -37,9 +34,5 @@ class DriversRepositoryImpl(
             Log.e("DriverRepository", "Error fetching driver $driverId: ${e.message}", e)
             null
         }
-    }
-
-    override suspend fun getWikipediaSummary(title: String): WikipediaSummary {
-        return wikiApiService.getPageSummary(title)
     }
 }

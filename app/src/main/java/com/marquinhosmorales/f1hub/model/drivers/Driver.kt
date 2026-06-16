@@ -1,6 +1,6 @@
 package com.marquinhosmorales.f1hub.model.drivers
 
-import com.marquinhosmorales.f1hub.model.TeamID
+import com.marquinhosmorales.f1hub.model.teams.TeamID
 import kotlinx.serialization.Serializable
 
 @Serializable

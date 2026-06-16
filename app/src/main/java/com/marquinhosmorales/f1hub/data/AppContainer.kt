@@ -4,11 +4,16 @@ import com.marquinhosmorales.f1hub.data.drivers.DriversRepository
 import com.marquinhosmorales.f1hub.data.drivers.DriversRepositoryImpl
 import com.marquinhosmorales.f1hub.data.races.RacesRepository
 import com.marquinhosmorales.f1hub.data.races.RacesRepositoryImpl
+import com.marquinhosmorales.f1hub.data.teams.TeamsRepository
+import com.marquinhosmorales.f1hub.data.teams.TeamsRepositoryImpl
 import com.marquinhosmorales.f1hub.data.standings.StandingsRepository
 import com.marquinhosmorales.f1hub.data.standings.StandingsRepositoryImpl
+import com.marquinhosmorales.f1hub.data.wikipedia.WikipediaRepository
+import com.marquinhosmorales.f1hub.data.wikipedia.WikipediaRepositoryImpl
 import com.marquinhosmorales.f1hub.network.DriversApiService
 import com.marquinhosmorales.f1hub.network.RacesApiService
 import com.marquinhosmorales.f1hub.network.StandingsApiService
+import com.marquinhosmorales.f1hub.network.TeamsApiService
 import com.marquinhosmorales.f1hub.network.WikipediaApiService
 import kotlinx.serialization.json.Json
 import okhttp3.MediaType.Companion.toMediaType
@@ -22,6 +27,8 @@ interface AppContainer {
     val driversRepository: DriversRepository
     val racesRepository: RacesRepository
     val standingsRepository: StandingsRepository
+    val teamsRepository: TeamsRepository
+    val wikipediaRepository: WikipediaRepository
 }
 
 class DefaultAppContainer : AppContainer {
@@ -75,14 +82,23 @@ class DefaultAppContainer : AppContainer {
         f1Retrofit.create<RacesApiService>()
     }
 
+    private val teamsApiService: TeamsApiService by lazy {
+        f1Retrofit.create<TeamsApiService>()
+    }
+
     private val standingsApiService: StandingsApiService by lazy {
         f1Retrofit.create<StandingsApiService>()
     }
 
     override val driversRepository: DriversRepository =
-        DriversRepositoryImpl(driversApiService, wikiApiService)
+        DriversRepositoryImpl(driversApiService)
+
+    override val wikipediaRepository: WikipediaRepository =
+        WikipediaRepositoryImpl(wikiApiService)
 
     override val racesRepository: RacesRepository = RacesRepositoryImpl(racesApiService)
+
+    override val teamsRepository: TeamsRepository = TeamsRepositoryImpl(teamsApiService)
 
     override val standingsRepository: StandingsRepository =
         StandingsRepositoryImpl(standingsApiService)

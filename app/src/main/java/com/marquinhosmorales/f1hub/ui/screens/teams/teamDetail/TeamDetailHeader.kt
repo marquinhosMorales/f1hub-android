@@ -1,12 +1,9 @@
-package com.marquinhosmorales.f1hub.ui.screens.drivers.driverDetail
+package com.marquinhosmorales.f1hub.ui.screens.teams.teamDetail
 
 import android.content.res.Configuration.UI_MODE_NIGHT_YES
 import androidx.compose.foundation.background
-import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.Row
-import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
@@ -19,6 +16,7 @@ import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.text.PlatformTextStyle
@@ -29,20 +27,17 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import coil.compose.SubcomposeAsyncImage
 import coil.request.ImageRequest
-import com.commit451.coiltransformations.facedetection.CenterOnFaceTransformation
-import com.marquinhosmorales.f1hub.data.drivers.mockVerstappen
+import com.marquinhosmorales.f1hub.model.teams.Team
 import com.marquinhosmorales.f1hub.ui.theme.F1HubTheme
 import com.marquinhosmorales.f1hub.ui.theme.Formula1Wide
-import com.marquinhosmorales.f1hub.ui.theme.accentColor
 import com.marquinhosmorales.f1hub.utils.ImageLoaderProvider
 
 @Composable
-fun DriverDetailHeader(
-    number: Int,
-    name: String,
-    surname: String,
+fun TeamDetailHeader(
+    team: Team,
     imageUrl: String?
 ) {
+    val teamColor = team.teamId?.color() ?: Color.Gray
     Surface(
         modifier = Modifier.fillMaxWidth(),
         color = MaterialTheme.colorScheme.background
@@ -53,8 +48,8 @@ fun DriverDetailHeader(
             Box(
                 modifier = Modifier
                     .fillMaxWidth()
-                    .height(300.dp)
-                    .background(MaterialTheme.colorScheme.surfaceVariant.copy(alpha = 0.3f))
+                    .height(200.dp)
+                    .background(teamColor)
             ) {
                 if (!imageUrl.isNullOrEmpty()) {
                     val context = LocalContext.current
@@ -62,12 +57,13 @@ fun DriverDetailHeader(
                         model = ImageRequest.Builder(context)
                             .data(imageUrl)
                             .crossfade(true)
-                            .transformations(CenterOnFaceTransformation(zoom = 20))
                             .build(),
                         imageLoader = ImageLoaderProvider.getImageLoader(context),
-                        contentDescription = "$name $surname",
-                        modifier = Modifier.fillMaxSize(),
-                        contentScale = ContentScale.Crop,
+                        contentDescription = team.teamName,
+                        modifier = Modifier
+                            .fillMaxSize()
+                            .padding(32.dp),
+                        contentScale = ContentScale.Fit,
                         alignment = Alignment.Center,
                         loading = {
                             Box(
@@ -76,53 +72,42 @@ fun DriverDetailHeader(
                             ) {
                                 CircularProgressIndicator(
                                     modifier = Modifier.width(32.dp),
-                                    color = MaterialTheme.colorScheme.onSurfaceVariant.copy(alpha = 0.5f)
+                                    color = Color.White.copy(alpha = 0.5f)
                                 )
                             }
                         },
                         error = {
-                            DriverInitialsPlaceholder(name, surname)
+                            TeamNamePlaceholder(team.teamName)
                         }
                     )
                 } else {
-                    DriverInitialsPlaceholder(name, surname)
+                    TeamNamePlaceholder(team.teamName)
                 }
             }
 
-            Row(
+            Box(
                 modifier = Modifier
                     .fillMaxWidth()
-                    .padding(16.dp),
-                horizontalArrangement = Arrangement.Center,
-                verticalAlignment = Alignment.CenterVertically
+                    .padding(vertical = 16.dp),
+                contentAlignment = Alignment.Center
             ) {
                 Text(
-                    text = number.toString(),
+                    text = team.teamName,
                     style = MaterialTheme.typography.headlineMedium.copy(
-                        fontFamily = Formula1Wide,
-                        fontWeight = FontWeight.Bold,
-                        color = accentColor
+                        fontWeight = FontWeight.Bold
                     )
                 )
-                Spacer(modifier = Modifier.width(16.dp))
-                Column {
-                    Text(
-                        text = name,
-                        style = MaterialTheme.typography.headlineSmall
-                    )
-                    Text(
-                        text = surname.uppercase(),
-                        style = MaterialTheme.typography.headlineMedium.copy(fontWeight = FontWeight.Bold)
-                    )
-                }
             }
         }
     }
 }
 
 @Composable
-private fun DriverInitialsPlaceholder(name: String, surname: String) {
-    val initials = (name.take(1) + surname.take(1)).uppercase()
+private fun TeamNamePlaceholder(name: String) {
+    val initials = name.split(" ")
+        .mapNotNull { it.firstOrNull()?.uppercase() }
+        .joinToString("")
+
     Box(
         modifier = Modifier.fillMaxSize(),
         contentAlignment = Alignment.Center
@@ -132,10 +117,10 @@ private fun DriverInitialsPlaceholder(name: String, surname: String) {
             modifier = Modifier.fillMaxWidth(),
             textAlign = TextAlign.Center,
             style = MaterialTheme.typography.displayLarge.copy(
-                fontSize = 120.sp,
+                fontSize = 100.sp,
                 fontWeight = FontWeight.Black,
                 fontFamily = Formula1Wide,
-                color = MaterialTheme.colorScheme.onSurface.copy(alpha = 0.1f),
+                color = Color.White.copy(alpha = 0.15f),
                 platformStyle = PlatformTextStyle(
                     includeFontPadding = false
                 )
@@ -144,15 +129,13 @@ private fun DriverInitialsPlaceholder(name: String, surname: String) {
     }
 }
 
-@Preview("Driver Detail Header")
-@Preview("Driver Detail Header (dark)", uiMode = UI_MODE_NIGHT_YES)
+@Preview("Team Detail Header")
+@Preview("Team Detail Header (dark)", uiMode = UI_MODE_NIGHT_YES)
 @Composable
-fun DriverDetailHeaderPreview() {
+fun TeamDetailHeaderPreview() {
     F1HubTheme {
-        DriverDetailHeader(
-            number = mockVerstappen.number,
-            name = mockVerstappen.name,
-            surname = mockVerstappen.surname,
+        TeamDetailHeader(
+            team = com.marquinhosmorales.f1hub.data.teams.mockRedBull,
             imageUrl = null
         )
     }
