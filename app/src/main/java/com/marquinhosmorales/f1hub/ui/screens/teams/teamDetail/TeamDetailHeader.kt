@@ -37,7 +37,7 @@ fun TeamDetailHeader(
     team: Team,
     imageUrl: String?
 ) {
-    val teamColor = team.teamId?.color() ?: Color.Gray
+    val teamColor = team.teamId?.color(0.5f) ?: Color.Gray
     Surface(
         modifier = Modifier.fillMaxWidth(),
         color = MaterialTheme.colorScheme.background
