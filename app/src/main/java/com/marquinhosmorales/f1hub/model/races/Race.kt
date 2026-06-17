@@ -1,7 +1,7 @@
 package com.marquinhosmorales.f1hub.model.races
 
 import com.marquinhosmorales.f1hub.model.Circuit
-import com.marquinhosmorales.f1hub.model.Team
+import com.marquinhosmorales.f1hub.model.teams.Team
 import com.marquinhosmorales.f1hub.model.drivers.Driver
 import kotlinx.serialization.SerialName
 import kotlinx.serialization.Serializable
@@ -14,7 +14,7 @@ data class Race(
     val raceId: String,
     val championshipId: String,
     val raceName: String,
-    val laps: Int,
+    val laps: Int?,
     val round: Int,
     val url: String,
     val schedule: RaceSchedule,

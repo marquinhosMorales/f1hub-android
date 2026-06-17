@@ -31,12 +31,17 @@ import com.marquinhosmorales.f1hub.ui.theme.Formula1Wide
 import com.marquinhosmorales.f1hub.utils.CountriesUtils
 
 @Composable
-fun DriverItem(driver: Driver, modifier: Modifier = Modifier) {
+fun DriverItem(
+    driver: Driver,
+    modifier: Modifier = Modifier,
+    onClick: (String, String) -> Unit = { _, _ -> }
+) {
     Card(
         modifier = modifier
             .fillMaxWidth()
             .padding(horizontal = 16.dp, vertical = 8.dp),
-        elevation = CardDefaults.cardElevation(defaultElevation = 2.dp)
+        elevation = CardDefaults.cardElevation(defaultElevation = 2.dp),
+        onClick = { onClick(driver.id, driver.url) }
     ) {
         Row(
             modifier = Modifier

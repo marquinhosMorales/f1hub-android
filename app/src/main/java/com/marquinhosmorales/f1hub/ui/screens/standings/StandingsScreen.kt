@@ -12,9 +12,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.derivedStateOf
 import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableIntStateOf
 import androidx.compose.runtime.remember
-import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.lifecycle.viewmodel.compose.viewModel
@@ -28,13 +26,14 @@ import com.marquinhosmorales.f1hub.ui.theme.accentColor
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun StandingsScreen(
-    viewModel: StandingsViewModel
+    viewModel: StandingsViewModel,
+    onDriverClick: (String, String) -> Unit = { _, _ -> },
+    onTeamClick: (String, String) -> Unit = { _, _ -> }
 ) {
     val uiState by viewModel.uiState.collectAsState()
-    var selectedTabIndex by remember { mutableIntStateOf(0) }
-    val standings by remember(selectedTabIndex, uiState) {
+    val standings by remember(uiState.selectedTabIndex, uiState) {
         derivedStateOf {
-            if (selectedTabIndex == 0) uiState.driversStandings else uiState.teamsStandings
+            if (uiState.selectedTabIndex == 0) uiState.driversStandings else uiState.teamsStandings
         }
     }
 
@@ -47,22 +46,28 @@ fun StandingsScreen(
     ) { innerPadding ->
         PullToRefreshBox(
             isRefreshing = uiState.isRefreshing,
-            onRefresh = { if (selectedTabIndex == 0) viewModel.refreshDriversStandings() else viewModel.refreshTeamsStandings() },
+            onRefresh = { if (uiState.selectedTabIndex == 0) viewModel.refreshDriversStandings() else viewModel.refreshTeamsStandings() },
             modifier = Modifier
                 .fillMaxSize()
                 .padding(innerPadding)
         ) {
             TabbedContent(
                 tabs = listOf("Drivers", "Teams"),
-                selectedTabIndex = selectedTabIndex,
-                onTabSelected = { selectedTabIndex = it },
+                selectedTabIndex = uiState.selectedTabIndex,
+                onTabSelected = { viewModel.updateSelectedTab(it) },
                 uiState = uiState,
                 accentColor = accentColor,
                 getItems = { state, tabIndex ->
                     standings
                 },
                 itemContent = { standingsEntry ->
-                    StandingsItem(standingsEntry)
+                    StandingsItem(standingsEntry, onClick = { id, wikiUrl ->
+                        if (uiState.selectedTabIndex == 0) {
+                            onDriverClick(id, wikiUrl)
+                        } else {
+                            onTeamClick(id, wikiUrl)
+                        }
+                    })
                 },
                 itemKey = { standingsEntry ->
                     standingsEntry.id

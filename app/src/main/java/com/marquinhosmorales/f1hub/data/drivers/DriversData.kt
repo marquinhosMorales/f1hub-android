@@ -1,6 +1,6 @@
 package com.marquinhosmorales.f1hub.data.drivers
 
-import com.marquinhosmorales.f1hub.model.TeamID
+import com.marquinhosmorales.f1hub.model.teams.TeamID
 import com.marquinhosmorales.f1hub.model.drivers.Driver
 
 val mockVerstappen = Driver(

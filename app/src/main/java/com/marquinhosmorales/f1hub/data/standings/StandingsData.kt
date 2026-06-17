@@ -4,7 +4,7 @@ import com.marquinhosmorales.f1hub.data.drivers.mockNorris
 import com.marquinhosmorales.f1hub.data.drivers.mockVerstappen
 import com.marquinhosmorales.f1hub.data.teams.mockMcLaren
 import com.marquinhosmorales.f1hub.data.teams.mockRedBull
-import com.marquinhosmorales.f1hub.model.TeamID
+import com.marquinhosmorales.f1hub.model.teams.TeamID
 import com.marquinhosmorales.f1hub.model.standings.StandingsEntry
 
 val mockVerstappenEntry = StandingsEntry(

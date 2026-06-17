@@ -1,7 +1,7 @@
 package com.marquinhosmorales.f1hub.model.standings
 
-import com.marquinhosmorales.f1hub.model.Team
-import com.marquinhosmorales.f1hub.model.TeamID
+import com.marquinhosmorales.f1hub.model.teams.Team
+import com.marquinhosmorales.f1hub.model.teams.TeamID
 import com.marquinhosmorales.f1hub.model.drivers.Driver
 import kotlinx.serialization.Serializable
 

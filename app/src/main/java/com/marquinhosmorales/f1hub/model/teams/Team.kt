@@ -1,17 +1,19 @@
-package com.marquinhosmorales.f1hub.model
+package com.marquinhosmorales.f1hub.model.teams
 
 import androidx.compose.ui.graphics.Color
 import com.marquinhosmorales.f1hub.ui.theme.alpine
 import com.marquinhosmorales.f1hub.ui.theme.astonMartin
+import com.marquinhosmorales.f1hub.ui.theme.audi
+import com.marquinhosmorales.f1hub.ui.theme.cadillac
 import com.marquinhosmorales.f1hub.ui.theme.ferrari
 import com.marquinhosmorales.f1hub.ui.theme.haas
 import com.marquinhosmorales.f1hub.ui.theme.mcLaren
 import com.marquinhosmorales.f1hub.ui.theme.mercedes
 import com.marquinhosmorales.f1hub.ui.theme.racingBulls
 import com.marquinhosmorales.f1hub.ui.theme.redBull
-import com.marquinhosmorales.f1hub.ui.theme.sauber
 import com.marquinhosmorales.f1hub.ui.theme.williams
 import kotlinx.serialization.KSerializer
+import kotlinx.serialization.SerialName
 import kotlinx.serialization.Serializable
 import kotlinx.serialization.descriptors.PrimitiveKind
 import kotlinx.serialization.descriptors.PrimitiveSerialDescriptor
@@ -23,7 +25,9 @@ import kotlinx.serialization.encoding.Encoder
 data class Team(
     val teamId: TeamID? = null,
     val teamName: String,
-    val country: String,
+    val country: String? = null,
+    val teamNationality: String? = null,
+    @SerialName("firstAppeareance")
     val firstAppearance: Int? = null,
     val constructorsChampionships: Int? = null,
     val driversChampionships: Int? = null,
@@ -45,7 +49,8 @@ enum class TeamID(val id: String) {
     AstonMartin("aston_martin"),
     RacingBulls("rb"),
     Alpine("alpine"),
-    Sauber("sauber"),
+    Audi("audi"),
+    Cadillac("cadillac"),
     Unknown("unknown");
 
     fun teamName(): String {
@@ -53,14 +58,13 @@ enum class TeamID(val id: String) {
             RedBull -> "Red Bull Racing"
             AstonMartin -> "Aston Martin"
             RacingBulls -> "Racing Bulls"
-            Sauber -> "Kick Sauber"
             Unknown -> ""
             else -> this.name
         }
     }
 
-    fun color(): Color {
-        return when (this) {
+    fun color(alpha: Float = 1.0f): Color {
+        val baseColor = when (this) {
             McLaren -> mcLaren
             Mercedes -> mercedes
             RedBull -> redBull
@@ -70,8 +74,14 @@ enum class TeamID(val id: String) {
             AstonMartin -> astonMartin
             RacingBulls -> racingBulls
             Alpine -> alpine
-            Sauber -> sauber
+            Audi -> audi
+            Cadillac -> cadillac
             Unknown -> Color.Black
+        }
+
+        return when (this) {
+            Williams, Audi -> baseColor.copy(alpha = alpha)
+            else -> baseColor
         }
     }
 
@@ -84,7 +94,8 @@ enum class TeamID(val id: String) {
 }
 
 object TeamIDSerializer : KSerializer<TeamID> {
-    override val descriptor: SerialDescriptor = PrimitiveSerialDescriptor("TeamID", PrimitiveKind.STRING)
+    override val descriptor: SerialDescriptor =
+        PrimitiveSerialDescriptor("TeamID", PrimitiveKind.STRING)
 
     override fun serialize(encoder: Encoder, value: TeamID) {
         encoder.encodeString(value.id)

@@ -1,8 +1,13 @@
 package com.marquinhosmorales.f1hub.ui.components
 
+import androidx.compose.foundation.layout.RowScope
 import androidx.compose.foundation.layout.WindowInsets
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.automirrored.filled.ArrowBack
 import androidx.compose.material3.CenterAlignedTopAppBar
 import androidx.compose.material3.ExperimentalMaterial3Api
+import androidx.compose.material3.Icon
+import androidx.compose.material3.IconButton
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.material3.TopAppBarDefaults
@@ -15,7 +20,10 @@ import com.marquinhosmorales.f1hub.ui.theme.accentColor
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun F1HubTopBar(
-    title: String
+    title: String,
+    canNavigateBack: Boolean = false,
+    navigateUp: () -> Unit = {},
+    actions: @Composable RowScope.() -> Unit = {}
 ) {
     CenterAlignedTopAppBar(
         windowInsets = WindowInsets(0, 0, 0, 0),
@@ -28,9 +36,22 @@ fun F1HubTopBar(
         colors = TopAppBarDefaults.centerAlignedTopAppBarColors(
             containerColor = accentColor,
             titleContentColor = Color.White
-        )
+        ),
+        navigationIcon = {
+            if (canNavigateBack) {
+                IconButton(onClick = navigateUp) {
+                    Icon(
+                        imageVector = Icons.AutoMirrored.Filled.ArrowBack,
+                        contentDescription = "Back",
+                        tint = Color.White
+                    )
+                }
+            }
+        },
+        actions = actions
     )
 }
+
 
 @Preview(showBackground = true)
 @Composable

@@ -29,7 +29,8 @@ import com.marquinhosmorales.f1hub.ui.theme.F1HubTheme
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun DriversScreen(
-    viewModel: DriversViewModel
+    viewModel: DriversViewModel,
+    onDriverClick: (String, String) -> Unit = { _, _ -> }
 ) {
     val uiState by viewModel.uiState.collectAsState()
     Scaffold(
@@ -66,7 +67,7 @@ fun DriversScreen(
                             horizontalAlignment = Alignment.CenterHorizontally
                         ) {
                             items(uiState.drivers, key = { it.id }) { driver ->
-                                DriverItem(driver)
+                                DriverItem(driver, onClick = onDriverClick)
                             }
                         }
                     }
