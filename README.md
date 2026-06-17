@@ -32,12 +32,13 @@ To build and run F1 Hub app follow these steps:
 
 | Category | Screenshot |
 |----------|------------|
-| Drivers | <img src="https://github.com/user-attachments/assets/0c2f4ac7-d804-473c-84b8-0fb5e61a1422" alt="Drivers" width="200"/> |
-| Races | <img src="https://github.com/user-attachments/assets/b5c6bc7e-c9f5-48d6-98ab-dc91d92a20e3" alt="Upcoming Races" width="200"/> <img src="https://github.com/user-attachments/assets/3547c5ac-a4cc-4d10-a6fe-a13a4985023a" alt="Past Races" width="200"/> |
-| Standings | <img src="https://github.com/user-attachments/assets/6eab5b25-c5aa-4bba-9279-486e289cbd21" alt="Driver Standings" width="200"/> <img src="https://github.com/user-attachments/assets/7e71cf0f-d83f-46cf-ac52-2c53555e49c7" alt="Team Standings" width="200"/> |
+| Drivers | <img src="https://github.com/user-attachments/assets/07761202-53fc-4ea2-b637-90470bd98789" alt="Drivers" width="200"/> |
+| Races | <img src="https://github.com/user-attachments/assets/fc65a23e-0cff-4241-b35f-e80010ad75e7" alt="Upcoming Races" width="200"/> <img src="https://github.com/user-attachments/assets/7d789bd0-87bd-414b-aa3b-121105a7d54c" alt="Past Races" width="200"/> |
+| Standings | <img src="https://github.com/user-attachments/assets/fbff3a6f-e38d-41b3-afc7-bc87dcc3fdac" alt="Driver Standings" width="200"/> <img src="https://github.com/user-attachments/assets/5b67753e-bd86-4100-84ee-27a98a8d3870" alt="Team Standings" width="200"/> |
+| Driver Detail | <img src="https://github.com/user-attachments/assets/7f6f8382-9052-466b-aa9a-58b2b56b3ef7" alt="Driver Detail" width="200"/> |
+| Team Detail | <img src="https://github.com/user-attachments/assets/b8b1c9eb-39ae-4b27-b30c-a6cdc7c69093" alt="Team Detail" width="200"/> |
 
 ## Contact
 For questions, suggestions, or collaboration inquiries, reach out to:
 - **Email**: marquinhosm@outlook.com
 - **GitHub**: marquinhosMorales
-
