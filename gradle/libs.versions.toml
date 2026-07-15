@@ -1,5 +1,5 @@
 [versions]
-agp = "9.2.1"
+agp = "9.3.0"
 kotlin = "2.2.10"
 coreKtx = "1.16.0"
 junit = "4.13.2"
@@ -14,7 +14,7 @@ kotlinxSerialization = "1.9.0"
 composeBom = "2025.06.01"
 coil = "2.6.0"
 coil-transformations = "2.0.2"
-google-mlkit-face-detection = "17.1.0"
+google-mlkit-face-detection = "16.1.7"
 
 [libraries]
 androidx-core-ktx = { group = "androidx.core", name = "core-ktx", version.ref = "coreKtx" }
@@ -40,7 +40,7 @@ okhttp-logging-interceptor = { group = "com.squareup.okhttp3", name = "logging-i
 kotlinx-serialization-json = { group = "org.jetbrains.kotlinx", name = "kotlinx-serialization-json", version.ref = "kotlinxSerialization" }
 coil-compose = { group = "io.coil-kt", name = "coil-compose", version.ref = "coil" }
 coil-transformations-face-detection = { group = "com.github.Commit451.coil-transformations", name = "transformations-face-detection", version.ref = "coil-transformations" }
-google-mlkit-face-detection = { group = "com.google.android.gms", name = "play-services-mlkit-face-detection", version.ref = "google-mlkit-face-detection" }
+google-mlkit-face-detection = { group = "com.google.mlkit", name = "face-detection", version.ref = "google-mlkit-face-detection" }
 
 [plugins]
 android-application = { id = "com.android.application", version.ref = "agp" }
