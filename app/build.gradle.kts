@@ -54,10 +54,7 @@ dependencies {
     implementation(libs.okhttp.logging.interceptor)
     implementation(libs.kotlinx.serialization.json)
     implementation(libs.coil.compose)
-    // Use Play Services version of ML Kit to support 16 KB page sizes and reduce APK size
-    implementation(libs.coil.transformations.face.detection) {
-        exclude(group = "com.google.mlkit", module = "face-detection")
-    }
+    implementation(libs.coil.transformations.face.detection)
     implementation(libs.google.mlkit.face.detection)
     testImplementation(libs.junit)
     androidTestImplementation(libs.androidx.junit)
